@@ -140,17 +140,6 @@ const EditAlbum = () => {
                 {albumForm.touched.artist && albumForm.errors.artist && (
                     <div style={{ color: "red" }}>{albumForm.errors.artist}</div>
                 )}
-
-                {/* <label>Genre</label>
-                <input
-                    name="genre"
-                    value={albumForm.values.genre}
-                    onChange={albumForm.handleChange}
-                    placeholder="Enter genre"
-                />
-                {albumForm.touched.genre && albumForm.errors.genre && (
-                    <div style={{ color: "red" }}>{albumForm.errors.genre}</div>
-                )} */}
                 
                 <select
                 name="genre"
