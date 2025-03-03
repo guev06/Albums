@@ -135,8 +135,6 @@ const AddAlbum = () => {
 </form>
 
 <style jsx>{`
-
-        
         .page-headings {
           text-align: center;
           font-size: 2rem;
