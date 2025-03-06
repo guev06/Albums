@@ -15,6 +15,7 @@ const AddAlbum = () => {
             artist: albumData.artist,
             cover: albumData.cover,
             stream: albumData.stream,
+            deleted: false 
 
         }
         const res = await axios.post("http://localhost:8000/albums/",albumSchema)
@@ -46,6 +47,8 @@ const AddAlbum = () => {
         },
         onError: (error) => {
           console.error("Error adding album:", error);
+          console.error("Error adding album:", error.response?.data || error.message);
+          alert(JSON.stringify(error.response?.data, null, 2)); // Show error in an alert
           // Display an error message to the user
         },
         invalidateQueries: ['albums']

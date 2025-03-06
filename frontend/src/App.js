@@ -9,7 +9,6 @@ import SearchForAlbum from './pages/SearchForAlbum';
 import Quiz from './pages/Quiz';
 import EditAlbum from './pages/EditAlbum';
 
-
 function App() {
   return (
     <div className="App">

@@ -10,5 +10,5 @@ class Album(BaseModel):
     genre: int
     cover: str
     stream: str
-    deleted: bool
-    viewcount: int
+    deleted: bool = False
+

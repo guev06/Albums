@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 from services.albums import add_album
 from schemas.album import Album as AlbumSchema
-from services.albums import get_albums_from_db,get_album_by_id,delete_album
+from services.albums import get_albums_from_db,get_album_by_id,delete_album,get_albums_by_genres
 from models.album_model import Album
 
 
@@ -25,6 +25,11 @@ def get_albums_route(db:Session = Depends(get_db)):
 def get_album_route_id(id: int, db: Session = Depends(get_db)):
     # Pass the 'id' from the path to 'get_album_by_id'
     return get_album_by_id(db, id)
+
+@router.get("/genres/{id}")
+def get_genres(id:int, db: Session=Depends(get_db)):
+    return get_albums_by_genres(db, id)
+
 
 import logging
 logging.basicConfig(level=logging.INFO)

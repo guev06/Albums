@@ -44,6 +44,13 @@ def get_album_by_id(db: Session, album_id: int):
         raise HTTPException(status_code=404, detail="Album not found")
     return album
 
+def get_albums_by_genres(db: Session, album_genre: int):
+    albums = db.query(Album).filter(Album.genre == album_genre).all()
+    print(albums)
+    if not albums:
+        raise HTTPException(status_code=404, detail="No albums found for this genre")
+    return albums
+
 
 def update_album(db: Session, album_id: int, updated_album: AlbumSchema):
     album = db.query(Album).filter(Album.id == album_id).first()

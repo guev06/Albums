@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./server
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./server:/server
+    env_file:
+      - ./server/.env
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: DaTApAss2307
+      POSTGRES_DB: albums_db
+      PGUSER: postgres
+      PGPORT: 5555
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "5555:5555"
+
+  frontend:
+    build: ./frontend  # Correct indentation here
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/frontend  # Add a space after the colon
+    env_file:
+      - ./frontend/.env  # Corrected to `env_file` (singular)
+
+volumes:
+  postgres_data:
