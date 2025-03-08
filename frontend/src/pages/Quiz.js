@@ -251,132 +251,136 @@ function Quiz() {
   const currentQuestion = questions[currentQuestionIndex];
 
 
-  
+  const handleAudioClick = (event) => {
+    event.stopPropagation();  // Prevents triggering the button click
+  };
   const quizElement = document.getElementById("quiz-container");
   return (
-    <div className="quiz-container">
-      <h1>ALQU!Z</h1>
-      <div>
-        <h2>{currentQuestion.question}</h2>
-        <div className="questions-container">
-          {currentQuestion.options.map((option, index) => (
-            <div key={index}>
-              <button
-                onClick={() => handleAnswer(option)}
-                disabled={selectedAnswer !== null}
-              >
-                <img src={option.img} alt={option.alt} />
-              </button>
-              {option.audioUrl && (
-                <div id="AudioPlayer">
-                  <audio controls>
-                    <source src={option.audioUrl} type="audio/mpeg" />
-                    Your browser does not support the audio element.
-                  </audio>
-                </div>
-              )}
-            </div>
-          ))}
+    <div>
+      {!quizFinished ? (
+        <div className="quiz-container">
+          <h1>ALQU!Z</h1>
+          <div>
+            <h2>{currentQuestion.question}</h2>
+            <div className="questions-container">
+              {currentQuestion.options.map((option, index) => (
+                <div key={index}>
+                  <button
+                    onClick={() => handleAnswer(option)}
+                    disabled={selectedAnswer !== null}
+                  >
+                    <img src={option.img} alt={option.alt} />
+                  </button>
+                  {option.audioUrl && (
+        <div id="AudioPlayer">
+          <audio controls key={option.audioUrl} onClick={(e) => {e.stopPropagation()}}>
+            <source src={option.audioUrl} type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
         </div>
-      </div>
+      )}
+                  
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
+          {console.log("finalGenreId before pass:", finalGenreId, typeof finalGenreId)}
+          <GetAlbumsByGenre albumGenre={{ [finalGenreId]: true }} />
+        </>
+      )}
+  
+      <style>
+        {`
+          .quiz-container {
+            background-color: #1e1b24;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+            margin-left: 300px;
+            max-width: 600px;
+            padding: 35px;
+            text-align: center;
+            transition: all 0.3s ease-in-out;
+            background: none;
+          }
+  
+          .questions-container {
+            display: flex;
+            flex-direction: row;
+            gap: 30px;
+            align-items: center;
+            justify-content: center;
+          }
+  
+          h1 {
+            color: rgb(208, 41, 97);
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            background: none;
+          }
+  
+          h2 {
+            color: rgb(207, 207, 207);
+            font-size: 1.8em;
+            margin-bottom: 30px;
+          }
+  
+          button {
+            background-color: rgb(0, 0, 0);
+            color: #fff;
+            border: none;
+            padding: 15px;
+            margin: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            width: 182px;
+            height: 182px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-left:10px;
+          }
+  
+          button:hover {
+            background-color: rgb(0, 0, 0);
+            transform: translateY(-3px);
+          }
+  
+          button img {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+          }
+  
+          button:hover img {
+            transform: scale(1.1);
+          }
+  
+          #AudioButton {
+            background-color: rgb(54, 154, 27);
+            padding: 10px 18px;
+            font-size: 0.9em;
+            width: auto;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 20px;
+          }
+  
+          #AudioButton:hover {
+            background-color: #4a148c;
+          }
+        `}
+      </style>
     </div>
   );
   
-        
-        <style>
-          {`
-            .quiz-container {
-              background-color: #1e1b24;
-              border-radius: 12px;
-              box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
-              margin-left: 300px;
-              max-width: 600px;
-              padding: 35px;
-              text-align: center;
-              transition: all 0.3s ease-in-out;
-              background: none;
-            }
-
-            .questions-container {
-              display: flex;
-              flex-direction: row;
-              gap: 30px;
-              align-items: center;
-              justify-content: center;
-            }
-
-            h1 {
-              color: rgb(208, 41, 97);
-              font-size: 2.5em;
-              margin-bottom: 20px;
-              letter-spacing: 1px;
-              background: none;
-            }
-
-            h2 {
-              color: rgb(207, 207, 207);
-              font-size: 1.8em;
-              margin-bottom: 30px;
-            }
-
-            button {
-              background-color: rgb(0, 0, 0);
-              color: #fff;
-              border: none;
-              padding: 15px;
-              margin: 12px;
-              cursor: pointer;
-              transition: all 0.3s ease;
-              font-size: 1.1em;
-              width: 182px;
-              height: 182px;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-              padding-left:10px
-            }
-
-            button:hover {
-              background-color: rgb(0, 0, 0);
-              transform: translateY(-3px);
-            }
-
-            button img {
-              width: 180px;
-              height: 180px;
-              object-fit: cover;
-              transition: transform 0.3s ease;
-            }
-
-            button:hover img {
-              transform: scale(1.1);
-            }
-
-            #AudioButton {
-              background-color: rgb(54, 154, 27);
-              padding: 10px 18px;
-              font-size: 0.9em;
-              width: auto;
-              height: auto;
-              margin-top: 10px;
-              border-radius: 20px;
-            }
-
-            #AudioButton:hover {
-              background-color: #4a148c;
-            }
-          `}
-        </style>
-      </div>
-      {quizFinished && (
-  <>
-    {console.log("finalGenreId before pass:", finalGenreId, typeof finalGenreId)}
-    <GetAlbumsByGenre albumGenre={{ [finalGenreId]: true }} />
-  </>
-)}
-    </div>
-  );
+  
 }
 
 export default Quiz;
