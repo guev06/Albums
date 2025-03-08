@@ -37,7 +37,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend:/frontend  # Add a space after the colon
+      - ./frontend:/frontend # Add a space after the colon
     env_file:
       - ./frontend/.env  # Corrected to `env_file` (singular)
 
