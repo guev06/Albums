@@ -98,13 +98,6 @@ const AddAlbum = () => {
         <div style={{color:'red'}}>{AlbumForm.errors.artist}</div>
     )} 
 
-{/* 
-    <label>{"Genre"}</label>
-    <input className="add-input" name = "genre" type="text" onChange={AlbumForm.handleChange} placeholder="enter genre"></input>
-    { AlbumForm.errors.genre && (
-        <div style={{color:'red'}}>{AlbumForm.errors.genre}</div>
-    )}  */}
-
     <label>{"Cover"}</label>
     <input className="add-input" name = "cover" type="text" onChange={AlbumForm.handleChange} placeholder="enter cover"></input>
     { AlbumForm.errors.cover && (
@@ -137,48 +130,30 @@ const AddAlbum = () => {
     <br></br><button disabled={!AlbumForm.isValid} type="submit">Submit</button>
 </form>
 
-<style jsx>{`
-        .page-headings {
-          text-align: center;
-          font-size: 2rem;
-          color: #333;
-        }
+<style>{`
+    #album-container {
+        padding: 0px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        margin-top: 50px;
+        border-radius: 7px;
+        width: 100%;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
 
-        .add-input {
-          padding: 8px;
-          margin: 5px 0;
-          width: 300px;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        }
+    #the-loading-cat {
+        width: 800px; /* Adjust size as needed */
+        height: 800px;
+        display: block;
+        margin: 100px auto; /* Center horizontally */
+        flex-shrink: 0;
+    }
 
-        button {
-          padding: 10px 20px;
-          background-color: #4CAF50;
-          color: white;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-        }
-
-        button:disabled {
-          background-color: #ccc;
-          cursor: not-allowed;
-        }
-
-        label {
-          font-size: 1.1rem;
-          margin-top: 10px;
-        }
-
-        select {
-          padding: 8px;
-          margin: 5px 0;
-          width: 300px;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-        }
-      `}</style>
+    /* ... your other styles ... */
+`}</style>
     </>
 }
 export default AddAlbum
