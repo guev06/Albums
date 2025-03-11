@@ -3,6 +3,7 @@ from models.album_model import Album
 from schemas.album import Album as AlbumSchema
 from fastapi import HTTPException
 from models.album_model import Album 
+from models.Genres import Genres
 
 def add_album(db: Session,album:AlbumSchema):
     db_album=Album(
@@ -21,6 +22,8 @@ def add_album(db: Session,album:AlbumSchema):
 def get_albums_from_db(db: Session):
     return db.query(Album).filter(Album.deleted == False).all()
 
+# def get_genres_from_db(db: Session):
+#     return db.query(Genres).all()
 
 
 def delete_album(db: Session, album_id: int):
@@ -43,6 +46,19 @@ def get_album_by_id(db: Session, album_id: int):
     if album is None:
         raise HTTPException(status_code=404, detail="Album not found")
     return album
+
+def get_album_by_artist(db: Session, album_artist: str):
+    album = db.query(Album).filter(Album.artist == album_artist).first()
+    if album is None:
+        raise HTTPException(status_code=404, detail="Album not found")
+    return album
+
+def get_album_by_title(db: Session, album_title: str):
+    album = db.query(Album).filter(Album.title == album_title).first()
+    if album is None:
+        raise HTTPException(status_code=404, detail="Album not found")
+    return album
+
 
 def get_albums_by_genres(db: Session, album_genre: int):
     albums = db.query(Album).filter(Album.genre == album_genre).all()

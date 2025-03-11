@@ -4,8 +4,14 @@ from sqlalchemy.orm import Session
 from database import get_db
 from services.albums import add_album
 from schemas.album import Album as AlbumSchema
-from services.albums import get_albums_from_db,get_album_by_id,delete_album,get_albums_by_genres
+from services.albums import get_albums_from_db,get_album_by_id,delete_album,get_albums_by_genres,get_album_by_artist, get_album_by_title
 from models.album_model import Album
+from models.Genres import Genres
+
+
+# @router.get("/genres")
+# def get_genres_route(new_album: AlbumSchema, db :Session = Depends(get_db)):
+#     return add_album(db, new_album)
 
 
 
@@ -25,6 +31,17 @@ def get_albums_route(db:Session = Depends(get_db)):
 def get_album_route_id(id: int, db: Session = Depends(get_db)):
     # Pass the 'id' from the path to 'get_album_by_id'
     return get_album_by_id(db, id)
+
+@router.get("/search/name/{artist}")
+def get_album_route_artist(artist: str, db: Session = Depends(get_db)):
+    # Pass the 'id' from the path to 'get_album_by_id'
+    return get_album_by_artist(db, artist)
+
+@router.get("/search/title/{title}")
+def get_album_route_title(title: str, db: Session = Depends(get_db)):
+    # Pass the 'id' from the path to 'get_album_by_id'
+    return get_album_by_title(db, title)
+
 
 @router.get("/genres/{id}")
 def get_genres(id:int, db: Session=Depends(get_db)):
