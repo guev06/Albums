@@ -16,6 +16,9 @@ function Quiz() {
   const [totalPoints, setTotalPoints] = useState(0);
   const [quizFinished, setQuizFinished] = useState(false);
   const [finalGenreId, setFinalGenreId] = useState(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+
   const questions = [
     {
       question: "Pick the color you like more",
@@ -229,32 +232,41 @@ function Quiz() {
     },
   ];
 
-  const handleAnswer = (selectedOption) => {
+  let currentAudio = null; // Track currently playing audio
+
+  const handleAudioPlay = (event) => {
+    if (currentAudio && currentAudio !== event.target) {
+      currentAudio.pause(); // Pause the previously playing audio
+    }
+    currentAudio = event.target; // Update to the currently playing audio
+  };
+
+  const handleAnswerClick = (selectedOption) => {
+    if (isTransitioning) return; // Prevent multiple clicks
+
+    setIsTransitioning(true);
     setSelectedAnswer(selectedOption);
-  
+
     const points = selectedOption.points;
+
     setTotalPoints((prevPoints) => prevPoints + points);
-  
+
     setTimeout(() => {
       setSelectedAnswer(null);
       if (currentQuestionIndex < questions.length - 1) {
         setCurrentQuestionIndex((prev) => prev + 1);
       } else {
+        const finalPoints = totalPoints + points; // Get final total
+        setFinalGenreId(Math.floor(finalPoints / 10));
         setQuizFinished(true);
-        const finalPoints = totalPoints + points; // Get the final points.
-        window.alert(`total is : ${finalPoints / 10}`); // Display the alert.
-        setFinalGenreId(Math.floor(finalPoints / 10)); // Set finalGenreId.
-        console.log("Final totalPoints:", finalPoints);
+        alert(`You finished ALQU!Z!`);
       }
+      setIsTransitioning(false);
     }, 1000);
   };
+
   const currentQuestion = questions[currentQuestionIndex];
 
-
-  const handleAudioClick = (event) => {
-    event.stopPropagation();  // Prevents triggering the button click
-  };
-  const quizElement = document.getElementById("quiz-container");
   return (
     <div>
       {!quizFinished ? (
@@ -264,22 +276,26 @@ function Quiz() {
             <h2>{currentQuestion.question}</h2>
             <div className="questions-container">
               {currentQuestion.options.map((option, index) => (
-                <div key={index}>
+                <div key={index} className="option-container">
                   <button
-                    onClick={() => handleAnswer(option)}
-                    disabled={selectedAnswer !== null}
+                    onClick={() => handleAnswerClick(option)}
+                    disabled={selectedAnswer !== null || isTransitioning} // Prevent spam clicking
                   >
                     <img src={option.img} alt={option.alt} />
                   </button>
                   {option.audioUrl && (
-        <div id="AudioPlayer">
-          <audio controls key={option.audioUrl} onClick={(e) => {e.stopPropagation()}}>
-            <source src={option.audioUrl} type="audio/mpeg" />
-            Your browser does not support the audio element.
-          </audio>
-        </div>
-      )}
-                  
+                    <div id="AudioPlayer">
+                      <audio
+                        controls
+                        key={option.audioUrl}
+                        onClick={(e) => e.stopPropagation()}
+                        onPlay={handleAudioPlay}
+                      >
+                        <source src={option.audioUrl} type="audio/mpeg" />
+                        Your browser does not support the audio element.
+                      </audio>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -291,21 +307,16 @@ function Quiz() {
           <GetAlbumsByGenre albumGenre={{ [finalGenreId]: true }} />
         </>
       )}
-  
+
       <style>
         {`
           .quiz-container {
-            background-color: #1e1b24;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
-            margin-left: 300px;
             max-width: 600px;
             padding: 35px;
             text-align: center;
-            transition: all 0.3s ease-in-out;
-            background: none;
+            padding-left: 350px;
           }
-  
+
           .questions-container {
             display: flex;
             flex-direction: row;
@@ -313,21 +324,27 @@ function Quiz() {
             align-items: center;
             justify-content: center;
           }
-  
+
+          .option-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+
           h1 {
-            color: rgb(208, 41, 97);
+            color: #bb86fc;
             font-size: 2.5em;
             margin-bottom: 20px;
             letter-spacing: 1px;
             background: none;
           }
-  
+
           h2 {
             color: rgb(207, 207, 207);
             font-size: 1.8em;
             margin-bottom: 30px;
           }
-  
+
           button {
             background-color: rgb(0, 0, 0);
             color: #fff;
@@ -343,44 +360,39 @@ function Quiz() {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding-left:10px;
+            padding-left: 10px;
           }
-  
+
           button:hover {
             background-color: rgb(0, 0, 0);
             transform: translateY(-3px);
           }
-  
+
           button img {
             width: 180px;
             height: 180px;
             object-fit: cover;
             transition: transform 0.3s ease;
           }
-  
+
           button:hover img {
             transform: scale(1.1);
           }
-  
-          #AudioButton {
-            background-color: rgb(54, 154, 27);
-            padding: 10px 18px;
-            font-size: 0.9em;
-            width: auto;
-            height: auto;
-            margin-top: 10px;
-            border-radius: 20px;
-          }
-  
-          #AudioButton:hover {
-            background-color: #4a148c;
+
+          #AudioPlayer {
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: auto;
+            margin-right: auto;
           }
         `}
       </style>
     </div>
   );
-  
-  
 }
 
 export default Quiz;
