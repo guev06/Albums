@@ -311,10 +311,11 @@ function Quiz() {
       <style>
         {`
           .quiz-container {
-            max-width: 600px;
-            padding: 35px;
-            text-align: center;
-            padding-left: 350px;
+            margin-top: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
           }
 
           .questions-container {
